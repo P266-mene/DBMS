@@ -1,0 +1,142 @@
+Enter password: *******
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 1
+Server version: 5.0.45-community-nt MySQL Community Edition (GPL)
+
+Type 'help;' or '\h' for help. Type '\c' to clear the buffer.
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| adc_assignment     |
+| db1                |
+| demo               |
+| food               |
+| hotel              |
+| login              |
+| msc2020            |
+| mysql              |
+| stu                |
+| test               |
++--------------------+
+11 rows in set (0.23 sec)
+
+mysql> use db1;
+Database changed
+mysql> show tables;
++---------------+
+| Tables_in_db1 |
++---------------+
+| customer      |
+| product       |
+| student       |
+| teacher       |
++---------------+
+4 rows in set (0.12 sec)
+
+mysql> select * from student;
++--------+-----------+------+
+| rollno | name      | tid  |
++--------+-----------+------+
+|      1 | sanskriti |  501 |
+|      2 | shreyas   |  501 |
+|      3 | rasika    |  501 |
++--------+-----------+------+
+3 rows in set (0.52 sec)
+
+mysql> select * from teacher;
++-----+-------+
+| tid | tname |
++-----+-------+
+| 501 | rahul |
++-----+-------+
+1 row in set (0.05 sec)
+
+mysql> insert into teacher values(502,'Manisha');
+Query OK, 1 row affected (1.49 sec)
+
+mysql> insert into teacher values(4,'priya',502);
+ERROR 1136 (21S01): Column count doesn't match value count at row 1
+mysql> insert into student values(4,'priya',502);
+Query OK, 1 row affected (0.17 sec)
+
+mysql> insert into student values(5,'tanaya',502);
+Query OK, 1 row affected (0.19 sec)
+
+mysql> insert into student values(6,'aditya',502);
+Query OK, 1 row affected (0.10 sec)
+
+mysql> select * from teacher;
++-----+---------+
+| tid | tname   |
++-----+---------+
+| 501 | rahul   |
+| 502 | Manisha |
++-----+---------+
+2 rows in set (0.00 sec)
+
+mysql> select name from student,teacher where tname='rahul';
++-----------+
+| name      |
++-----------+
+| sanskriti |
+| shreyas   |
+| rasika    |
+| priya     |
+| tanaya    |
+| aditya    |
++-----------+
+6 rows in set (0.05 sec)
+
+mysql> select * from student;
++--------+-----------+------+
+| rollno | name      | tid  |
++--------+-----------+------+
+|      1 | sanskriti |  501 |
+|      2 | shreyas   |  501 |
+|      3 | rasika    |  501 |
+|      4 | priya     |  502 |
+|      5 | tanaya    |  502 |
+|      6 | aditya    |  502 |
++--------+-----------+------+
+6 rows in set (0.00 sec)
+
+mysql> select name from student,teacher where tname='rahul' and teacher.tid=student.tid;
++-----------+
+| name      |
++-----------+
+| sanskriti |
+| shreyas   |
+| rasika    |
++-----------+
+3 rows in set (0.23 sec)
+
+mysql> select name from student,teacher where tname='manisha' and teacher.tid=student.tid;
++--------+
+| name   |
++--------+
+| priya  |
+| tanaya |
+| aditya |
++--------+
+3 rows in set (1.05 sec)
+
+mysql> desc student;
++--------+-------------+------+-----+---------+-------+
+| Field  | Type        | Null | Key | Default | Extra |
++--------+-------------+------+-----+---------+-------+
+| rollno | int(11)     | NO   | PRI |         |       |
+| name   | varchar(20) | YES  |     | NULL    |       |
+| tid    | int(11)     | YES  | MUL | NULL    |       |
++--------+-------------+------+-----+---------+-------+
+3 rows in set (0.18 sec)
+
+mysql> update student set name='shreyash' set name='shreyas';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'set name='shreyas'' at line 1
+mysql> update student set name='shreyash' where name='shreyas';
+Query OK, 1 row affected (0.55 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql>

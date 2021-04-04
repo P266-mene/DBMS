@@ -1,0 +1,250 @@
+Enter password: *******
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 1
+Server version: 5.0.45-community-nt MySQL Community Edition (GPL)
+
+Type 'help;' or '\h' for help. Type '\c' to clear the buffer.
+
+mysql> create database db1;
+Query OK, 1 row affected (0.19 sec)
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| adc_assignment     |
+| db1                |
+| demo               |
+| food               |
+| hotel              |
+| login              |
+| msc2020            |
+| mysql              |
+| stu                |
+| test               |
++--------------------+
+11 rows in set (0.25 sec)
+
+mysql> use db1;
+Database changed
+mysql> create table customer(cid integer primary key, cname varchar(20) not null, add text,cno integer);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'add text,cno integer)' at line 1
+mysql> create table customer(cid integer primary key, cname varchar(20) , add text,cno integer);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'add text,cno integer)' at line 1
+mysql> create table customer(cid integer primary key, cname varchar(20) , add varchar(20),cno integer);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'add varchar(20),cno integer)' at line 1
+mysql> create table customer(cid integer primary key, cname varchar(20) , Cadd varchar(20),cno integer);
+Query OK, 0 rows affected (0.16 sec)
+
+mysql> create table customer1(cid integer primary key, cname varchar(20) not null , Cadd varchar(20),cno integer);
+Query OK, 0 rows affected (0.13 sec)
+
+mysql> drop table customer1;
+Query OK, 0 rows affected (0.07 sec)
+
+mysql> show tables;
++---------------+
+| Tables_in_db1 |
++---------------+
+| customer      |
++---------------+
+1 row in set (0.00 sec)
+
+mysql> desc customer;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| cid   | int(11)     | NO   | PRI |         |       |
+| cname | varchar(20) | YES  |     | NULL    |       |
+| Cadd  | varchar(20) | YES  |     | NULL    |       |
+| cno   | int(11)     | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+4 rows in set (0.14 sec)
+
+mysql> ALTER TABLE customer
+    -> MODIFY cname NOT NULL;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'NOT NULL' at line 2
+mysql> ALTER TABLE customer
+    -> MODIFY cname varchar(20) NOT NULL;
+Query OK, 0 rows affected (0.21 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc customer;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| cid   | int(11)     | NO   | PRI |         |       |
+| cname | varchar(20) | NO   |     |         |       |
+| Cadd  | varchar(20) | YES  |     | NULL    |       |
+| cno   | int(11)     | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+4 rows in set (0.01 sec)
+
+mysql> insert into customer values(1,'tanaya','pune',78964133);
+Query OK, 1 row affected (0.09 sec)
+
+mysql> select * from customer;
++-----+--------+------+----------+
+| cid | cname  | Cadd | cno      |
++-----+--------+------+----------+
+|   1 | tanaya | pune | 78964133 |
++-----+--------+------+----------+
+1 row in set (0.03 sec)
+
+mysql> insert into customer values(2,'sanskriti','pune',789443355);
+Query OK, 1 row affected (0.14 sec)
+
+mysql> insert into customer values(3,'shreyas','pune',98746622);
+Query OK, 1 row affected (0.12 sec)
+
+mysql> insert into customer values(4,'aditya','pune','asdcffgg');
+ERROR 1366 (HY000): Incorrect integer value: 'asdcffgg' for column 'cno' at row 1
+mysql> insert into customer values(3,'aditya','pune',78966541);
+ERROR 1062 (23000): Duplicate entry '3' for key 1
+mysql> select * from customer;
++-----+-----------+------+-----------+
+| cid | cname     | Cadd | cno       |
++-----+-----------+------+-----------+
+|   1 | tanaya    | pune |  78964133 |
+|   2 | sanskriti | pune | 789443355 |
+|   3 | shreyas   | pune |  98746622 |
++-----+-----------+------+-----------+
+3 rows in set (0.00 sec)
+
+mysql> insert into customer values(4,'aditya','pune',78965412);
+Query OK, 1 row affected (0.04 sec)
+
+mysql> select * from customer;
++-----+-----------+------+-----------+
+| cid | cname     | Cadd | cno       |
++-----+-----------+------+-----------+
+|   1 | tanaya    | pune |  78964133 |
+|   2 | sanskriti | pune | 789443355 |
+|   3 | shreyas   | pune |  98746622 |
+|   4 | aditya    | pune |  78965412 |
++-----+-----------+------+-----------+
+4 rows in set (0.00 sec)
+
+mysql> create table product(pid integer primary key,pname varchar(20) not null,price integer, date date);
+Query OK, 0 rows affected (0.80 sec)
+
+mysql> desc product;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| pid   | int(11)     | NO   | PRI |         |       |
+| pname | varchar(20) | NO   |     |         |       |
+| price | int(11)     | YES  |     | NULL    |       |
+| date  | date        | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> insert into product values(101,'abc',500,'26-03-2015');
+ERROR 1292 (22007): Incorrect date value: '26-03-2015' for column 'date' at row 1
+mysql> insert into product values(101,'abc',500,'26''03''2015');
+ERROR 1292 (22007): Incorrect date value: '26'03'2015' for column 'date' at row 1
+mysql> insert into product values(101,'abc',500,'26-03-2015');
+ERROR 1292 (22007): Incorrect date value: '26-03-2015' for column 'date' at row 1
+mysql> insert into product values(101,'abc',500,'2015-06-12');
+Query OK, 1 row affected (0.11 sec)
+
+mysql> select * from product;
++-----+-------+-------+------------+
+| pid | pname | price | date       |
++-----+-------+-------+------------+
+| 101 | abc   |   500 | 2015-06-12 |
++-----+-------+-------+------------+
+1 row in set (0.00 sec)
+
+mysql> insert into product values(102,'xyz',300'2015-06-12');
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ''2015-06-12')' at line 1
+mysql> insert into product values(102,'xyz',300,'2015-06-12');
+Query OK, 1 row affected (0.12 sec)
+
+mysql> insert into product values(103,'efg',700,'2015-06-12');
+Query OK, 1 row affected (0.12 sec)
+
+mysql> select * from product;
++-----+-------+-------+------------+
+| pid | pname | price | date       |
++-----+-------+-------+------------+
+| 101 | abc   |   500 | 2015-06-12 |
+| 102 | xyz   |   300 | 2015-06-12 |
+| 103 | efg   |   700 | 2015-06-12 |
++-----+-------+-------+------------+
+3 rows in set (0.00 sec)
+
+mysql> select pname from product where price>300;
++-------+
+| pname |
++-------+
+| abc   |
+| efg   |
++-------+
+2 rows in set (0.04 sec)
+
+mysql> alter table product add cid int foreign key(cid) references customer(cid);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'foreign key(cid) references customer(cid)' at line 1
+mysql> alter table product add cid int, foreign key(cid) references customer(cid);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'foreign key(cid) references customer(cid)' at line 1
+mysql> alter table product add cid int, foreign key(cid), references customer(cid);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'foreign key(cid), references customer(cid)' at line 1
+mysql> alter table product add cid int,  references customer(cid);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'references customer(cid)' at line 1
+mysql> alter table product add cid int, foreign key(cid) references customer(cid);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'foreign key(cid) references customer(cid)' at line 1
+mysql> create table teacher(tid int primary key,tname varchar(20));
+Query OK, 0 rows affected (0.17 sec)
+
+mysql> create table student(rollno int primary key, name varchar(20),tid int foreign key(tid) references teacher(tid));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'foreign key(tid) references teacher(tid))' at line 1
+mysql> create table student(rollno int primary key, name varchar(20),tid int ,foreign key(tid) references teacher(tid));
+Query OK, 0 rows affected (0.66 sec)
+
+mysql>
+mysql> insert into teacher values(501,'rahul');
+Query OK, 1 row affected (0.09 sec)
+
+mysql> insert into student values(1,'sanskriti',1);
+ERROR 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`db1/student`, CONSTRAINT `student_ibfk_1` FOREIGN KEY (`tid`) REFERENCES `teacher` (`tid`))
+mysql> select * from teacher;
++-----+-------+
+| tid | tname |
++-----+-------+
+| 501 | rahul |
++-----+-------+
+1 row in set (0.05 sec)
+
+mysql> insert into student values(1,'sanskriti',501);
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into student values(2,'shreyas',501);
+Query OK, 1 row affected (0.06 sec)
+
+mysql> insert into student values(3,'rasika',501);
+Query OK, 1 row affected (0.04 sec)
+
+mysql> select * from student;
++--------+-----------+------+
+| rollno | name      | tid  |
++--------+-----------+------+
+|      1 | sanskriti |  501 |
+|      2 | shreyas   |  501 |
+|      3 | rasika    |  501 |
++--------+-----------+------+
+3 rows in set (0.00 sec)
+
+mysql> select name from student where tname='rahul';
+ERROR 1054 (42S22): Unknown column 'tname' in 'where clause'
+mysql> select name from student,teacher where  tname='rahul';
++-----------+
+| name      |
++-----------+
+| sanskriti |
+| shreyas   |
+| rasika    |
++-----------+
+3 rows in set (0.04 sec)
+
+mysql>

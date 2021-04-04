@@ -1,0 +1,188 @@
+Enter password: *******
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 3
+Server version: 5.0.45-community-nt MySQL Community Edition (GPL)
+
+Type 'help;' or '\h' for help. Type '\c' to clear the buffer.
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| adc_assignment     |
+| d                  |
+| data               |
+| db1                |
+| demo               |
+| food               |
+| hotel              |
+| login              |
+| msc2020            |
+| mysql              |
+| stu                |
+| test               |
++--------------------+
+13 rows in set (0.34 sec)
+
+mysql> use d;
+Database changed
+mysql> show tables;
++-------------+
+| Tables_in_d |
++-------------+
+| dept        |
+| expenses    |
+| machine     |
+| machine1    |
+| salesman    |
+| trip        |
++-------------+
+6 rows in set (0.18 sec)
+
+mysql> create table city(city varchar(20) primary key,state varchar(20));
+Query OK, 0 rows affected (0.40 sec)
+
+mysql> insert into city values('pune','maharashtra');
+Query OK, 1 row affected (0.14 sec)
+
+mysql> insert into city values('mumbai','maharashtra');
+Query OK, 1 row affected (0.31 sec)
+
+mysql> create table warehouses(wid int primary key,wname varchar(20),location varchar(20),city varchar(20) ,foreign key(city) references city(city));
+Query OK, 0 rows affected (0.29 sec)
+
+mysql> insert into warehouses values(1,'abc','karvenagar','pune') ;
+Query OK, 1 row affected (0.19 sec)
+
+mysql> select * from warehouses;
++-----+-------+------------+------+
+| wid | wname | location   | city |
++-----+-------+------------+------+
+|   1 | abc   | karvenagar | pune |
++-----+-------+------------+------+
+1 row in set (0.21 sec)
+
+mysql> insert into warehouses values(2,'xyz','karvenagar','pune') ;
+Query OK, 1 row affected (0.33 sec)
+
+mysql> insert into warehouses values(3,'pqr','kalyan','mumbai') ;
+Query OK, 1 row affected (0.27 sec)
+
+mysql> select * from warehouses;
++-----+-------+------------+--------+
+| wid | wname | location   | city   |
++-----+-------+------------+--------+
+|   1 | abc   | karvenagar | pune   |
+|   2 | xyz   | karvenagar | pune   |
+|   3 | pqr   | kalyan     | mumbai |
++-----+-------+------------+--------+
+3 rows in set (0.19 sec)
+
+mysql> create table stores(sid int primary key,store_name varchar(20),location_city varchar(20) ,wid int ,foreign key(wid) references warehouses(wid) );
+Query OK, 0 rows affected (0.49 sec)
+
+mysql> insert into stores values(101,'s1','pune',1)
+    -> ;
+Query OK, 1 row affected (0.09 sec)
+
+mysql> insert into stores values(101,'s1','pune',1);
+ERROR 1062 (23000): Duplicate entry '101' for key 1
+mysql> insert into stores values(102,'s2','pune',1);
+Query OK, 1 row affected (0.19 sec)
+
+mysql> insert into stores values(103,'s3','pune',2);
+Query OK, 1 row affected (0.25 sec)
+
+mysql> insert into stores values(104,'s4','mumbai',3);
+Query OK, 1 row affected (1.11 sec)
+
+mysql> select * from stores;
++-----+------------+---------------+------+
+| sid | store_name | location_city | wid  |
++-----+------------+---------------+------+
+| 101 | s1         | pune          |    1 |
+| 102 | s2         | pune          |    1 |
+| 103 | s3         | pune          |    2 |
+| 104 | s4         | mumbai        |    3 |
++-----+------------+---------------+------+
+4 rows in set (0.11 sec)
+
+mysql> create table item(item_no int primary key,desc text,weight int,cost int);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'desc text,weight int,cost int)' at line 1
+mysql> create table item(item_no int primary key,descri text,weight int,cost int);
+Query OK, 0 rows affected (0.34 sec)
+
+mysql> insert into item values(200,'AAA',200,50);
+Query OK, 1 row affected (0.36 sec)
+
+mysql> insert into item values(201,'BBB',500,100);
+Query OK, 1 row affected (0.21 sec)
+
+mysql> insert into item values(203,'ccc',500,100);
+Query OK, 1 row affected (0.09 sec)
+
+mysql> create table cutomer(cno int primary key,cname varchra(20),cadd varchar(20),C_city varchar(20));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'varchra(20),cadd varchar(20),C_city varchar(20))' at line 1
+mysql> create table customer(cno int primary key,cname varchar(20),cadd varchar(20),C_city varchar(20));
+Query OK, 0 rows affected (0.43 sec)
+
+mysql> insert into cutomer values(500,'varsha','kothrud','pune');
+ERROR 1146 (42S02): Table 'd.cutomer' doesn't exist
+mysql> insert into customer values(500,'varsha','kothrud','pune');
+Query OK, 1 row affected (0.25 sec)
+
+mysql> insert into customer values(501,'sanskriti','kothrud','pune');
+Query OK, 1 row affected (0.16 sec)
+
+mysql> insert into customer values(502,'aditya','kalyan','mumbai');
+Query OK, 1 row affected (0.49 sec)
+
+mysql> create table order(ono int primary key,o_date date,cno int,foreign key(cno) references customes(cno));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'order(ono int primary key,o_date date,cno int,foreign key(cno) references custom' at line 1
+mysql> create table order1(ono int primary key,o_date date,cno int,foreign key(cno) references customes(cno));
+ERROR 1005 (HY000): Can't create table '.\d\order1.frm' (errno: 150)
+mysql> create table order_t(ono int primary key,o_date date,cno int,foreign key(cno) references customes(cno));
+ERROR 1005 (HY000): Can't create table '.\d\order_t.frm' (errno: 150)
+mysql> create table o1(ono int primary key,o_date date,cno int,foreign key(cno) references customes(cno));
+ERROR 1005 (HY000): Can't create table '.\d\o1.frm' (errno: 150)
+mysql> create table abc(ono int primary key,o_date date,cno int,foreign key(cno) references customes(cno));
+ERROR 1005 (HY000): Can't create table '.\d\abc.frm' (errno: 150)
+mysql> select * from item;
++---------+--------+--------+------+
+| item_no | descri | weight | cost |
++---------+--------+--------+------+
+|     200 | AAA    |    200 |   50 |
+|     201 | BBB    |    500 |  100 |
+|     203 | ccc    |    500 |  100 |
++---------+--------+--------+------+
+3 rows in set (0.06 sec)
+
+mysql> select * from item where weight=(select min(weight) from item);
++---------+--------+--------+------+
+| item_no | descri | weight | cost |
++---------+--------+--------+------+
+|     200 | AAA    |    200 |   50 |
++---------+--------+--------+------+
+1 row in set (0.53 sec)
+
+mysql> select * from warehouses where cities.city=warehouses.city and city='pune';
+ERROR 1054 (42S22): Unknown column 'cities.city' in 'where clause'
+mysql> select * from warehouses,cities where cities.city=warehouses.city and city='pune';
+ERROR 1146 (42S02): Table 'd.cities' doesn't exist
+mysql> select * from warehouses,city where city.city=warehouses.city and city='pune';
+ERROR 1052 (23000): Column 'city' in where clause is ambiguous
+mysql> select * from warehouses where  city='pune';
++-----+-------+------------+------+
+| wid | wname | location   | city |
++-----+-------+------------+------+
+|   1 | abc   | karvenagar | pune |
+|   2 | xyz   | karvenagar | pune |
++-----+-------+------------+------+
+2 rows in set (0.28 sec)
+
+mysql>
+
+
+
+

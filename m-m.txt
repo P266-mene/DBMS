@@ -1,0 +1,171 @@
+Enter password: *******
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 1
+Server version: 5.0.45-community-nt MySQL Community Edition (GPL)
+
+Type 'help;' or '\h' for help. Type '\c' to clear the buffer.
+
+mysql> use db1;
+Database changed
+mysql> show tables;
++---------------+
+| Tables_in_db1 |
++---------------+
+| area1         |
+| atable        |
+| btable        |
+| customer      |
+| customer1     |
+| dept          |
+| emp           |
+| employee      |
+| first         |
+| person        |
+| product       |
+| student       |
+| teacher       |
+| v1            |
+| worker        |
++---------------+
+15 rows in set (0.00 sec)
+
+mysql> create table college(code int primary key,name varchar(20));
+Query OK, 0 rows affected (0.49 sec)
+
+mysql> create table student(sid int primary key,name varchar(20));
+ERROR 1050 (42S01): Table 'student' already exists
+mysql> create table student1(sid int primary key,name varchar(20));
+Query OK, 0 rows affected (0.63 sec)
+
+mysql> insert into student values(1,'meena')
+    -> ;
+ERROR 1136 (21S01): Column count doesn't match value count at row 1
+mysql> insert into student values(1,'meena');
+ERROR 1136 (21S01): Column count doesn't match value count at row 1
+mysql> insert into student1 values(1,'meena');
+Query OK, 1 row affected (0.14 sec)
+
+mysql> insert into student1 values(2,'mayuri');
+Query OK, 1 row affected (0.02 sec)
+
+mysql> insert into student1 values(3,'Diksha');
+Query OK, 1 row affected (0.96 sec)
+
+mysql> insert into student1 values(4,'veena');
+Query OK, 1 row affected (0.16 sec)
+
+mysql> insert into student1 values(5,'neeta');
+Query OK, 1 row affected (0.16 sec)
+
+mysql> insert into student1 values(6,'nimila');
+Query OK, 1 row affected (0.60 sec)
+
+mysql> insert into college values(101,'KHS');
+Query OK, 1 row affected (1.51 sec)
+
+mysql> insert into college values(101,'Bharti');
+ERROR 1062 (23000): Duplicate entry '101' for key 1
+mysql> insert into college values(102,'Bharti');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> select * from student1;
++-----+--------+
+| sid | name   |
++-----+--------+
+|   1 | meena  |
+|   2 | mayuri |
+|   3 | Diksha |
+|   4 | veena  |
+|   5 | neeta  |
+|   6 | nimila |
++-----+--------+
+6 rows in set (0.01 sec)
+
+mysql> select * from college;
++------+--------+
+| code | name   |
++------+--------+
+|  101 | KHS    |
+|  102 | Bharti |
++------+--------+
+2 rows in set (0.00 sec)
+
+mysql> create table col_stu(code varchar(20),foreign key(code) references college(code),sid int,foreign key(sid) references student1(sid),course varchar(20));
+ERROR 1005 (HY000): Can't create table '.\db1\col_stu.frm' (errno: 150)
+mysql> create table col_stu1(code varchar(20),foreign key(code) references college(code),sid int,foreign key(sid) references student1(sid),course varchar(20));
+ERROR 1005 (HY000): Can't create table '.\db1\col_stu1.frm' (errno: 150)
+mysql> create table col_stu1(code varchar(20), foreign key(code) references college(code), sid int,foreign key(sid) references student1(sid),course varchar(20));
+ERROR 1005 (HY000): Can't create table '.\db1\col_stu1.frm' (errno: 150)
+mysql> create table col_stu1(code varchar(20), sid int, foreign key(code) references college (code),foreign key(sid) references student1(sid),course varchar(20));
+ERROR 1005 (HY000): Can't create table '.\db1\col_stu1.frm' (errno: 150)
+mysql> create table col_stu(code int,foreign key(code) references college(code),sid int,foreign key(sid) references student1(sid),course varchar(20));
+Query OK, 0 rows affected (0.16 sec)
+
+mysql> insert into col_stu values(101,1,'comp science');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into col_stu values(101,2,'comp science');
+Query OK, 1 row affected (0.07 sec)
+
+mysql> insert into col_stu values(101,3,'BBA');
+Query OK, 1 row affected (0.13 sec)
+
+mysql> insert into col_stu values(102,4,'comp science');
+Query OK, 1 row affected (0.05 sec)
+
+mysql> insert into col_stu values(102,5,'Art');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into col_stu values(102,6,'Art');
+Query OK, 1 row affected (0.05 sec)
+
+mysql> select * from col_stu;
++------+------+--------------+
+| code | sid  | course       |
++------+------+--------------+
+|  101 |    1 | comp science |
+|  101 |    2 | comp science |
+|  101 |    3 | BBA          |
+|  102 |    4 | comp science |
+|  102 |    5 | Art          |
+|  102 |    6 | Art          |
++------+------+--------------+
+6 rows in set (0.00 sec)
+
+mysql> select count(sid) from col_stu where student1.sid=col_stu.sid and college.code=col_stu.code group by col_stu.code;
+ERROR 1054 (42S22): Unknown column 'student1.sid' in 'where clause'
+mysql> select count(sid) from col_stu,student,college where student1.sid=col_stu.sid and college.code=col_stu.code group by col_stu.code;
+ERROR 1054 (42S22): Unknown column 'student1.sid' in 'where clause'
+mysql> select count(sid) from col_stu,student1,college where student1.sid=col_stu.sid and college.code=col_stu.code group by col_stu.code;
+ERROR 1052 (23000): Column 'sid' in field list is ambiguous
+mysql> select count(col_stu.sid) from col_stu,student1,college where student1.sid=col_stu.sid and college.code=col_stu.code group by col_stu.code;
++--------------------+
+| count(col_stu.sid) |
++--------------------+
+|                  3 |
+|                  3 |
++--------------------+
+2 rows in set (0.11 sec)
+
+mysql> select count(col_stu.sid),col_stu.code from col_stu,student1,college where student1.sid=col_stu.sid and college.code=col_stu.code group by col_stu.code;
++--------------------+------+
+| count(col_stu.sid) | code |
++--------------------+------+
+|                  3 |  101 |
+|                  3 |  102 |
++--------------------+------+
+2 rows in set (0.00 sec)
+
+mysql> select count(col_stu.sid),col_stu.code,college.name from col_stu,student1,college where student1.sid=col_stu.sid and college.code=col_stu.code college.name='khs';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'college.name='khs'' at line 1
+mysql> select count(col_stu.sid),col_stu.code,college.name from col_stu,student1,college where student1.sid=col_stu.sid and college.code=col_stu.code  and college.name='khs';
+ERROR 1140 (42000): Mixing of GROUP columns (MIN(),MAX(),COUNT(),...) with no GROUP columns is illegal if there is no GROUP BY clause
+mysql> select count(col_stu.sid),col_stu.code,college.name from col_stu,student1,college where student1.sid=col_stu.sid and college.code=col_stu.code  and college.name='khs' group by college.name;
++--------------------+------+------+
+| count(col_stu.sid) | code | name |
++--------------------+------+------+
+|                  3 |  101 | KHS  |
++--------------------+------+------+
+1 row in set (0.00 sec)
+
+mysql>

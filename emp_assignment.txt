@@ -1,0 +1,136 @@
+Enter password: *******
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 1
+Server version: 5.0.45-community-nt MySQL Community Edition (GPL)
+
+Type 'help;' or '\h' for help. Type '\c' to clear the buffer.
+
+mysql> use db1;
+Database changed
+
+mysql> drop table emp;
+Query OK, 0 rows affected (1.00 sec)
+
+mysql> create table emp(emi_id int primary key,emp_name varchar(20),address text,bdate date);
+Query OK, 0 rows affected (0.07 sec)
+
+mysql> create table investor(inv_name varchar(20),inv_no int primary key,inv_date date,inv_amt int,emi_id int ,foreign key(emi_id) references emp(emi_id));
+Query OK, 0 rows affected (0.09 sec)
+
+mysql> insert into emp values(101,'abc','pune','2020-02-10');
+Query OK, 1 row affected (0.05 sec)
+
+mysql> insert into emp values(102,'xyz','pune','2020-02-10');
+Query OK, 1 row affected (0.06 sec)
+
+
+mysql> insert into investor values('joshi',1,'2020-06-23',500,101);
+Query OK, 1 row affected (0.81 sec)
+
+mysql> insert into investor values('more',2,'2020-06-23',500,101);
+Query OK, 1 row affected (0.05 sec)
+
+
+mysql> insert into investor values('kadam',3,'2020-06-23',1000,102);
+Query OK, 1 row affected (0.04 sec)
+
+mysql> insert into investor values('jadhav',4,'2020-06-23',1000,102);
+Query OK, 1 row affected (0.05 sec)
+
+mysql> insert into investor values('abc',5,'2020-06-23',1000,101);
+Query OK, 1 row affected (0.07 sec)
+
+mysql> insert into investor values('jadhav',6,'2020-06-23',1000,101);
+Query OK, 1 row affected (0.14 sec)
+
+mysql> insert into investor values('joshi',7,'2020-06-23',1000,101);
+Query OK, 1 row affected (0.03 sec)
+
+mysql> select * from emp;
++--------+----------+---------+------------+
+| emi_id | emp_name | address | bdate      |
++--------+----------+---------+------------+
+|    101 | abc      | pune    | 2020-02-10 |
+|    102 | xyz      | pune    | 2020-02-10 |
++--------+----------+---------+------------+
+2 rows in set (0.00 sec)
+
+mysql> select * from investor;
++----------+--------+------------+---------+--------+
+| inv_name | inv_no | inv_date   | inv_amt | emi_id |
++----------+--------+------------+---------+--------+
+| joshi    |      1 | 2020-06-23 |     500 |    101 |
+| more     |      2 | 2020-06-23 |     500 |    101 |
+| kadam    |      3 | 2020-06-23 |    1000 |    102 |
+| jadhav   |      4 | 2020-06-23 |    1000 |    102 |
+| abc      |      5 | 2020-06-23 |    1000 |    101 |
+| jadhav   |      6 | 2020-06-23 |    1000 |    101 |
+| joshi    |      7 | 2020-06-23 |    1000 |    101 |
++----------+--------+------------+---------+--------+
+7 rows in set (0.00 sec)
+
+======================================================================
+1>............
+
+mysql> select  inv_name from investor union select  emp_name from emp ;
++----------+
+| inv_name |
++----------+
+| joshi    |
+| more     |
+| kadam    |
+| jadhav   |
+| abc      |
+| xyz      |
++----------+
+6 rows in set (0.00 sec)
+---------------------------------------------------------------------------------------------------------------------
+2..............
+
+mysql> select  inv_name from investor union all select  emp_name from emp ;
++----------+
+| inv_name |
++----------+
+| joshi    |
+| more     |
+| kadam    |
+| jadhav   |
+| abc      |
+| jadhav   |
+| joshi    |
+| abc      |
+| xyz      |
++----------+
+9 rows in set (0.04 sec)
+--------------------------------------------------------------------------------------------------------------
+3......................
+
+Both are correct...... use can both queries........
+
+mysql>  select emp_name from emp intersect select inv_name from investor ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'select inv_name from investor' at line 
+
+mysql>  select emp_name from emp where emp_name in (select inv_name from investor) ;
++----------+
+| emp_name |
++----------+
+| abc      |
++----------+
+1 row in set (0.00 sec)
+--------------------------------------------------------------------------------------------------------------------
+4...................
+
+mysql>  select emp_name from emp where emp_name not  in (select inv_name from investor) ;
++----------+
+| emp_name |
++----------+
+| xyz      |
++----------+
+1 row in set (0.00 sec)
+
+
+
+
+
+
+

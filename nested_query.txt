@@ -1,0 +1,299 @@
+Enter password: *******
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 1
+Server version: 5.0.45-community-nt MySQL Community Edition (GPL)
+
+Type 'help;' or '\h' for help. Type '\c' to clear the buffer.
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| adc_assignment     |
+| d                  |
+| data               |
+| db1                |
+| demo               |
+| food               |
+| hotel              |
+| login              |
+| msc2020            |
+| mysql              |
+| stu                |
+| test               |
++--------------------+
+13 rows in set (2.68 sec)
+
+mysql> use db1;
+Database changed
+mysql> show tables;
++---------------+
+| Tables_in_db1 |
++---------------+
+| area1         |
+| atable        |
+| btable        |
+| col_stu       |
+| college       |
+| customer      |
+| customer1     |
+| department    |
+| dept          |
+| emp           |
+| emp_pro       |
+| employee      |
+| first         |
+| investor      |
+| person        |
+| product       |
+| project       |
+| student       |
+| student1      |
+| teacher       |
+| v1            |
+| v2            |
+| worker        |
++---------------+
+23 rows in set (0.00 sec)
+
+mysql> use d;
+Database changed
+
+
+mysql> create table DEPT(dept_no int primary key,dname varchar(20));
+Query OK, 0 rows affected (0.62 sec)
+
+mysql> create table salesman(sno int primary key,sname varchar(20),start_year year,dept_no int ,foreign key(dept_no)  references DEPT(dept_no));
+Query OK, 0 rows affected (0.32 sec)
+
+mysql> insert into DEPT values(101,'computer');
+Query OK, 1 row affected (0.14 sec)
+
+mysql> insert into DEPT values(102,'electronic');
+Query OK, 1 row affected (0.12 sec)
+
+mysql> select * from dept;
++---------+------------+
+| dept_no | dname      |
++---------+------------+
+|     101 | computer   |
+|     102 | electronic |
++---------+------------+
+2 rows in set (0.00 sec)
+
+mysql> insert into salesman values(1,'patil',2000,101);
+Query OK, 1 row affected (1.15 sec)
+
+mysql> select * from salesman;
++-----+-------+------------+---------+
+| sno | sname | start_year | dept_no |
++-----+-------+------------+---------+
+|   1 | patil |       2000 |     101 |
++-----+-------+------------+---------+
+1 row in set (0.03 sec)
+
+mysql> insert into salesman values(2,'pawar',2000,101);
+Query OK, 1 row affected (0.14 sec)
+
+mysql> insert into salesman values(3,'more',2000,102);
+Query OK, 1 row affected (0.07 sec)
+
+mysql> select * from salesman;
++-----+-------+------------+---------+
+| sno | sname | start_year | dept_no |
++-----+-------+------------+---------+
+|   1 | patil |       2000 |     101 |
+|   2 | pawar |       2000 |     101 |
+|   3 | more  |       2000 |     102 |
++-----+-------+------------+---------+
+3 rows in set (0.00 sec)
+
+mysql> create table expenses( eid int primary key,amount int);
+Query OK, 0 rows affected (0.17 sec)
+
+mysql> create table trip(tno int primary key,from_city varchar(20),to_city varchar(20),depature_date date,return_date date,eid int,foreign key(eid) references expenses(eid),sno int ,foreign key(sno) references salesman(sno));
+Query OK, 0 rows affected (0.18 sec)
+
+mysql> insert into expenses values(11,10000);
+Query OK, 1 row affected (0.10 sec)
+
+mysql> insert into expenses values(12,15000);
+Query OK, 1 row affected (0.10 sec)
+
+mysql> insert into expenses values(13,20000);
+Query OK, 1 row affected (0.10 sec)
+
+mysql> insert into expenses values(14,20000);
+Query OK, 1 row affected (0.05 sec)
+
+mysql> insert into trip values(2002,'pune','goa','2015-02-15','2015-02-20',11,1);
+Query OK, 1 row affected (0.86 sec)
+
+mysql> insert into trip values(2003,'pune','nashik','2015-02-15','2015-02-20',12,1);
+Query OK, 1 row affected (0.07 sec)
+
+mysql> insert into trip values(2004,'pune','ratnagiri','2015-02-15','2015-02-20',13,1);
+Query OK, 1 row affected (0.27 sec)
+
+mysql> insert into trip values(2005,'pune','satara','2015-02-15','2015-02-20',11,2);
+Query OK, 1 row affected (0.26 sec)
+
+mysql> insert into trip values(2006,'mumbai','satara','2015-02-15','2015-02-20',12,2);
+Query OK, 1 row affected (0.22 sec)
+
+mysql> insert into trip values(2007,'mumbai','satara','2015-02-15','2015-02-20',12,3);
+Query OK, 1 row affected (0.45 sec)
+
+mysql> select * from trip ;
++------+-----------+-----------+---------------+-------------+------+------+
+| tno  | from_city | to_city   | depature_date | return_date | eid  | sno  |
++------+-----------+-----------+---------------+-------------+------+------+
+| 2002 | pune      | goa       | 2015-02-15    | 2015-02-20  |   11 |    1 |
+| 2003 | pune      | nashik    | 2015-02-15    | 2015-02-20  |   12 |    1 |
+| 2004 | pune      | ratnagiri | 2015-02-15    | 2015-02-20  |   13 |    1 |
+| 2005 | pune      | satara    | 2015-02-15    | 2015-02-20  |   11 |    2 |
+| 2006 | mumbai    | satara    | 2015-02-15    | 2015-02-20  |   12 |    2 |
+| 2007 | mumbai    | satara    | 2015-02-15    | 2015-02-20  |   12 |    3 |
++------+-----------+-----------+---------------+-------------+------+------+
+6 rows in set (0.00 sec)
+
+mysql> select count(tno),sno from trip group by sno;
++------------+------+
+| count(tno) | sno  |
++------------+------+
+|          3 |    1 |
+|          2 |    2 |
+|          1 |    3 |
++------------+------+
+3 rows in set (0.11 sec)
+
+mysql> select count(tno),sno from trip group by sno order by count(sno) desc limit 1;
++------------+------+
+| count(tno) | sno  |
++------------+------+
+|          3 |    1 |
++------------+------+
+1 row in set (0.47 sec)
+
+
+mysql> select count(tno),salesman.sno,sname  from trip,salesman where salesman.sno=trip.sno group by sno order by count(tno) desc limit 1;
++------------+-----+-------+
+| count(tno) | sno | sname |
++------------+-----+-------+
+|          3 |   1 | patil |
++------------+-----+-------+
+1 row in set (0.04 sec)
+
+mysql> select * from salesman;
++-----+-------+------------+---------+
+| sno | sname | start_year | dept_no |
++-----+-------+------------+---------+
+|   1 | patil |       2000 |     101 |
+|   2 | pawar |       2000 |     101 |
+|   3 | more  |       2000 |     102 |
++-----+-------+------------+---------+
+3 rows in set (0.00 sec)
+
+===================================================================================
+mysql> select count(tno),salesman.sno,sname,dname  from trip,salesman,DEPT where salesman.sno=trip.sno and DEPT.dept_no=salesman.dept_no group by trip.sno order by count(trip.sno) desc limit 1;
++------------+-----+-------+----------+
+| count(tno) | sno | sname | dname    |
++------------+-----+-------+----------+
+|          3 |   1 | patil | computer |
++------------+-----+-------+----------+
+1 row in set (0.01 sec)
+====================================================================================
+mysql>
+mysql> select sum(amount) from expenses where eid in(select eid from trip where sno in(select sno from salesman where sname="patil"));
++-------------+
+| sum(amount) |
++-------------+
+|       45000 |
++-------------+
+1 row in set (0.22 sec)
+========================================================================================
+mysql> select * from expenses;
++-----+--------+
+| eid | amount |
++-----+--------+
+|  11 |  10000 |
+|  12 |  15000 |
+|  13 |  20000 |
+|  14 |  20000 |
++-----+--------+
+4 rows in set (0.00 sec)
+
+mysql> select * from trip;
++------+-----------+-----------+---------------+-------------+------+------+
+| tno  | from_city | to_city   | depature_date | return_date | eid  | sno  |
++------+-----------+-----------+---------------+-------------+------+------+
+| 2002 | pune      | goa       | 2015-02-15    | 2015-02-20  |   11 |    1 |
+| 2003 | pune      | nashik    | 2015-02-15    | 2015-02-20  |   12 |    1 |
+| 2004 | pune      | ratnagiri | 2015-02-15    | 2015-02-20  |   13 |    1 |
+| 2005 | pune      | satara    | 2015-02-15    | 2015-02-20  |   11 |    2 |
+| 2006 | mumbai    | satara    | 2015-02-15    | 2015-02-20  |   12 |    2 |
+| 2007 | mumbai    | satara    | 2015-02-15    | 2015-02-20  |   12 |    3 |
++------+-----------+-----------+---------------+-------------+------+------+
+6 rows in set (0.00 sec)
+=======================================================================
+mysql> select salesman.sno,sname from salesman,trip where salesman.sno=trip.sno and  to_city="satara";
++-----+-------+
+| sno | sname |
++-----+-------+
+|   2 | pawar |
+|   2 | pawar |
+|   3 | more  |
++-----+-------+
+3 rows in set (0.03 sec)
+==========================================================================
+
+mysql> select * from trip,expenses where expenses.eid=trip.eid and amount>15000;
++------+-----------+-----------+---------------+-------------+------+------+-----+--------+
+| tno  | from_city | to_city   | depature_date | return_date | eid  | sno  | eid | amount |
++------+-----------+-----------+---------------+-------------+------+------+-----+--------+
+| 2004 | pune      | ratnagiri | 2015-02-15    | 2015-02-20  |   13 |    1 |  13 |  20000 |
++------+-----------+-----------+---------------+-------------+------+------+-----+--------+
+1 row in set (0.02 sec)
+====================================================================
+mysql> select * from expenses;
++-----+--------+
+| eid | amount |
++-----+--------+
+|  11 |  10000 |
+|  12 |  15000 |
+|  13 |  20000 |
+|  14 |  20000 |
++-----+--------+
+4 rows in set (0.00 sec)
+===========================================================
+mysql> update expenses set amount=amount+5000;
+Query OK, 4 rows affected (0.10 sec)
+Rows matched: 4  Changed: 4  Warnings: 0
+==================================================================
+mysql> select * from expenses;
++-----+--------+
+| eid | amount |
++-----+--------+
+|  11 |  15000 |
+|  12 |  20000 |
+|  13 |  25000 |
+|  14 |  25000 |
++-----+--------+
+4 rows in set (0.00 sec)
+
+===================================================================================
+mysql> delete from trip where sno in(select sno from salesman where dept_no in(select dept_no from DEPT where dname="computer")) and eid in(select eid from expenses where amount>15000);
+Query OK, 3 rows affected (0.06 sec)
+
+mysql> select * from trip;
++------+-----------+---------+---------------+-------------+------+------+
+| tno  | from_city | to_city | depature_date | return_date | eid  | sno  |
++------+-----------+---------+---------------+-------------+------+------+
+| 2002 | pune      | goa     | 2015-02-15    | 2015-02-20  |   11 |    1 |
+| 2005 | pune      | satara  | 2015-02-15    | 2015-02-20  |   11 |    2 |
+| 2007 | mumbai    | satara  | 2015-02-15    | 2015-02-20  |   12 |    3 |
++------+-----------+---------+---------------+-------------+------+------+
+
+
+

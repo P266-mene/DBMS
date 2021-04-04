@@ -1,0 +1,183 @@
+Enter password: *******
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 1
+Server version: 5.0.45-community-nt MySQL Community Edition (GPL)
+
+Type 'help;' or '\h' for help. Type '\c' to clear the buffer.
+
+mysql> use db1;
+Database changed
+mysql> create table area(aname varchar(20) primary key,a_type varchar(20));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'area(aname varchar(20) primary key,a_type varchar(20))' at line 1
+mysql> create table area(aname varchar(20) primary key,a_type varchar(20));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'area(aname varchar(20) primary key,a_type varchar(20))' at line 1
+mysql> show tables;
++---------------+
+| Tables_in_db1 |
++---------------+
+| atable        |
+| btable        |
+| customer      |
+| customer1     |
+| dept          |
+| emp           |
+| employee      |
+| first         |
+| product       |
+| student       |
+| teacher       |
+| v1            |
+| worker        |
++---------------+
+13 rows in set (0.38 sec)
+
+mysql> create table area1(aname varchar(20) primary key,a_type varchar(20));
+Query OK, 0 rows affected (0.50 sec)
+
+mysql> create table person(pnumber int primary key,pname varchar(20),dob date,income int,area name,foreign key(aname) references area1(aname));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'name,foreign key(aname) references area1(aname))' at line 1
+mysql> create table person(pnumber int primary key,pname varchar(20),dob date,income int,aname varchar(20),foreign key(aname) references area1(aname));
+Query OK, 0 rows affected (0.18 sec)
+
+mysql> insert into area('kothrude','uraban');
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'area('kothrude','uraban')' at line 1
+mysql> insert into area1 ('kothrude','uraban');
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ''kothrude','uraban')' at line 1
+mysql> insert into area1 values ('kothrude','uraban');
+Query OK, 1 row affected (0.38 sec)
+
+mysql> insert into area1 values ('nhare','village');
+Query OK, 1 row affected (0.14 sec)
+
+mysql> insert into person values(1,'aditya','2002-06-04',500000,'kothrude');
+Query OK, 1 row affected (0.30 sec)
+
+mysql> insert into person values(2,'sansriti','2002-06-04',500000,'kothrude');
+Query OK, 1 row affected (0.18 sec)
+
+mysql> insert into person values(3,'rasika','2002-06-04',500000,'kothrude');
+Query OK, 1 row affected (0.11 sec)
+
+mysql> insert into person values(4,'shreyash','2002-06-04',500000,'nhare');
+Query OK, 1 row affected (0.35 sec)
+
+mysql> select * from person;
++---------+----------+------------+--------+----------+
+| pnumber | pname    | dob        | income | aname    |
++---------+----------+------------+--------+----------+
+|       1 | aditya   | 2002-06-04 | 500000 | kothrude |
+|       2 | sansriti | 2002-06-04 | 500000 | kothrude |
+|       3 | rasika   | 2002-06-04 | 500000 | kothrude |
+|       4 | shreyash | 2002-06-04 | 500000 | nhare    |
++---------+----------+------------+--------+----------+
+4 rows in set (0.04 sec)
+
+mysql> select * from area;
+ERROR 1146 (42S02): Table 'db1.area' doesn't exist
+mysql> select * from area1;
++----------+---------+
+| aname    | a_type  |
++----------+---------+
+| kothrude | uraban  |
+| nhare    | village |
++----------+---------+
+2 rows in set (0.00 sec)
+
+mysql> update person set income=70000 where pname='sanskiti'
+    -> ;
+Query OK, 0 rows affected (0.06 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update person set income=70000 where pname='sansriti'
+    -> ;
+Query OK, 1 row affected (0.26 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from person;
++---------+----------+------------+--------+----------+
+| pnumber | pname    | dob        | income | aname    |
++---------+----------+------------+--------+----------+
+|       1 | aditya   | 2002-06-04 | 500000 | kothrude |
+|       2 | sansriti | 2002-06-04 |  70000 | kothrude |
+|       3 | rasika   | 2002-06-04 | 500000 | kothrude |
+|       4 | shreyash | 2002-06-04 | 500000 | nhare    |
++---------+----------+------------+--------+----------+
+4 rows in set (0.00 sec)
+
+mysql> select count(pnumber) from person where area.aname=person.aname and  aname='kothrude';
+ERROR 1054 (42S22): Unknown column 'area.aname' in 'where clause'
+mysql> select count(pnumber) from person where area1.aname=person.aname and  aname='kothrude';
+ERROR 1054 (42S22): Unknown column 'area1.aname' in 'where clause'
+mysql> select count(pnumber) from person area1 where area1.aname=person.aname and  aname='kothrude';
+ERROR 1054 (42S22): Unknown column 'person.aname' in 'where clause'
+mysql> select count(pnumber) from person ;
++----------------+
+| count(pnumber) |
++----------------+
+|              4 |
++----------------+
+1 row in set (0.03 sec)
+
+mysql> select count(pnumber) from person  where area1.aname=person.aname and  aname='kothrude';
+ERROR 1054 (42S22): Unknown column 'area1.aname' in 'where clause'
+mysql> select count(pnumber) from person,area1  where area1.aname=person.aname and  aname='kothrude';
+ERROR 1052 (23000): Column 'aname' in where clause is ambiguous
+mysql> select count(pnumber) from person,area1  where area1.aname=person.aname and  person.aname='kothrude';
++----------------+
+| count(pnumber) |
++----------------+
+|              3 |
++----------------+
+1 row in set (0.33 sec)
+
+mysql> select sum(income) from person;
++-------------+
+| sum(income) |
++-------------+
+|     1570000 |
++-------------+
+1 row in set (0.06 sec)
+
+mysql> select pname from person where name like 's%';
+ERROR 1054 (42S22): Unknown column 'name' in 'where clause'
+mysql> select pname from person where pname like 's%';
++----------+
+| pname    |
++----------+
+| sansriti |
+| shreyash |
++----------+
+2 rows in set (0.00 sec)
+
+mysql> select pname from person where pname like '______';
++--------+
+| pname  |
++--------+
+| aditya |
+| rasika |
++--------+
+2 rows in set (0.00 sec)
+
+mysql> select pname from person where pnumber>2;
++----------+
+| pname    |
++----------+
+| rasika   |
+| shreyash |
++----------+
+2 rows in set (0.03 sec)
+
+mysql> delete from person where pname='aditya';
+Query OK, 1 row affected (0.11 sec)
+
+mysql> select * from person;
++---------+----------+------------+--------+----------+
+| pnumber | pname    | dob        | income | aname    |
++---------+----------+------------+--------+----------+
+|       2 | sansriti | 2002-06-04 |  70000 | kothrude |
+|       3 | rasika   | 2002-06-04 | 500000 | kothrude |
+|       4 | shreyash | 2002-06-04 | 500000 | nhare    |
++---------+----------+------------+--------+----------+
+3 rows in set (0.00 sec)
+
+mysql>

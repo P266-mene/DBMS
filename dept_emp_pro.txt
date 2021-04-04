@@ -1,0 +1,178 @@
+
+
+
+mysql> use db1;
+Database changed
+
+mysql> create table department(dept_no int primary key, dept_name varchar(20),location varchar(20));
+Query OK, 0 rows affected (0.66 sec)
+
+mysql> drop table employee;
+Query OK, 0 rows affected (0.56 sec)
+
+mysql> create table employee(emp_no int primary key,emp_name varchar(20),address text,bdate date,designation varchar(20) check(designation in("manager","staff","worker")),salary int ,dept_no int ,foreign key(dept_no) references department(dept_no));
+Query OK, 0 rows affected (0.94 sec)
+
+mysql> create table project(project_no int primary key,project_name varchar(20),status varchar(20));
+Query OK, 0 rows affected (0.14 sec)
+
+ 
+mysql> create table emp_pro(emp_no int,project_no int,foreign key(emp_no) references employee(emp_no),foreign key(project_no) references project(project_no));
+Query OK, 0 rows affected (0.29 sec)
+===================================================================================================
+
+mysql> insert into department values(10,'coding','pune');
+Query OK, 1 row affected (0.62 sec)
+
+mysql> insert into department values(20,'testing','pune');
+Query OK, 1 row affected (0.06 sec)
+
+mysql> insert into department values(30,'designing','pune');
+Query OK, 1 row affected (0.12 sec)
+
+mysql> desc employee;
++-------------+-------------+------+-----+---------+-------+
+| Field       | Type        | Null | Key | Default | Extra |
++-------------+-------------+------+-----+---------+-------+
+| emp_no      | int(11)     | NO   | PRI |         |       |
+| emp_name    | varchar(20) | YES  |     | NULL    |       |
+| address     | text        | YES  |     | NULL    |       |
+| bdate       | date        | YES  |     | NULL    |       |
+| designation | varchar(20) | YES  |     | NULL    |       |
+| salary      | int(11)     | YES  |     | NULL    |       |
+| dept_no     | int(11)     | YES  | MUL | NULL    |       |
++-------------+-------------+------+-----+---------+-------+
+7 rows in set (1.19 sec)
+
+mysql> insert into employee values(101,'abc','pune',"2000-02-23",500000,20);
+ERROR 1136 (21S01): Column count doesn't match value count at row 1
+mysql> insert into employee values(101,'abc','pune',"2000-02-23","manager",500000,20);
+Query OK, 1 row affected (0.97 sec)
+
+mysql> insert into employee values(102,'xyz','pune',"2000-02-23","worker",20000,20);
+Query OK, 1 row affected (0.13 sec)
+
+mysql> insert into employee values(103,'xxx','pune',"2000-02-23","manager",25000,10);
+Query OK, 1 row affected (0.17 sec)
+
+mysql> insert into employee values(104,'qwe','pune',"2000-02-23","worker",25000,10);
+Query OK, 1 row affected (0.04 sec)
+
+mysql> insert into employee values(105,'pqr','pune',"2000-02-23","staff",30000,10);
+Query OK, 1 row affected (0.61 sec)
+
+mysql> insert into project values(300,'food waste','running');
+Query OK, 1 row affected (0.13 sec)
+
+mysql> insert into project values(301,'envornment','complete');
+Query OK, 1 row affected (0.04 sec)
+
+mysql> insert into emp_pro values(101,300);
+Query OK, 1 row affected (0.08 sec)
+
+mysql> insert into emp_pro values(102,300);
+Query OK, 1 row affected (0.13 sec)
+
+mysql> insert into emp_pro values(103,301);
+Query OK, 1 row affected (0.05 sec)
+
+mysql> insert into emp_pro values(104,301);
+Query OK, 1 row affected (0.07 sec)
+
+mysql> insert into emp_pro values(105,301);
+Query OK, 1 row affected (0.13 sec)
+--------------------------------------------------------------------------------------------------------------------------------------
+1...
+
+mysql> select * from employee where salary=(select max(salary) from employee);
++--------+----------+---------+------------+-------------+--------+---------+
+| emp_no | emp_name | address | bdate      | designation | salary | dept_no |
++--------+----------+---------+------------+-------------+--------+---------+
+|    101 | abc      | pune    | 2000-02-23 | manager     | 500000 |      20 |
++--------+----------+---------+------------+-------------+--------+---------+
+1 row in set (0.10 sec)
+-------------------------------------------------------------------------------
+
+mysql> select * from project;
++------------+--------------+----------+
+| project_no | project_name | status   |
++------------+--------------+----------+
+|        300 | food waste   | running  |
+|        301 | envornment   | complete |
++------------+--------------+----------+
+2 rows in set (0.03 sec)
+
+mysql> select * from emp_pro;
++--------+------------+
+| emp_no | project_no |
++--------+------------+
+|    101 |        300 |
+|    102 |        300 |
+|    103 |        301 |
+|    104 |        301 |
+|    105 |        301 |
++--------+------------+
+5 rows in set (0.03 sec)
+---------------------------------------------------------------------------------------------------------------
+2.............
+
+mysql> select * from employee;
++--------+----------+---------+------------+-------------+--------+---------+
+| emp_no | emp_name | address | bdate      | designation | salary | dept_no |
++--------+----------+---------+------------+-------------+--------+---------+
+|    101 | abc      | pune    | 2000-02-23 | manager     | 500000 |      20 |
+|    102 | xyz      | pune    | 2000-02-23 | worker      |  20000 |      20 |
+|    103 | xxx      | pune    | 2000-02-23 | manager     |  25000 |      10 |
+|    104 | qwe      | pune    | 2000-02-23 | worker      |  25000 |      10 |
+|    105 | pqr      | pune    | 2000-02-23 | staff       |  30000 |      10 |
++--------+----------+---------+------------+-------------+--------+---------+
+5 rows in set (0.03 sec)
+
+
+mysql> DELETE from employee where dept_no=20;
+ERROR 1451 (23000): Cannot delete or update a parent row: a foreign key constraint fails (`db1/emp_pro`, CONSTRAINT `emp_pro_ibfk_1` FOREIGN KEY (`emp_no`) REFERENCES `employee` (`emp_no`))
+mysql>
+
+
+mysql> delete from emp_pro where emp_no in(select emp_no from employee where dept_no=20);
+Query OK, 2 rows affected (0.13 sec)
+mysql> DELETE from employee where dept_no=20;
+Query OK, 2 rows affected (0.06 sec)
+
+
+
+OUTPUT:
+
+mysql> select * from emp_pro;
++--------+------------+
+| emp_no | project_no |
++--------+------------+
+|    103 |        301 |
+|    104 |        301 |
+|    105 |        301 |
++--------+------------+
+3 rows in set (0.00 sec)
+mysql> select * from employee;
++--------+----------+---------+------------+-------------+--------+---------+
+| emp_no | emp_name | address | bdate      | designation | salary | dept_no |
++--------+----------+---------+------------+-------------+--------+---------+
+|    103 | xxx      | pune    | 2000-02-23 | manager     |  25000 |      10 |
+|    104 | qwe      | pune    | 2000-02-23 | worker      |  25000 |      10 |
+|    105 | pqr      | pune    | 2000-02-23 | staff       |  30000 |      10 |
++--------+----------+---------+------------+-------------+--------+---------+
+3 rows in set (0.00 sec)
+
+----------------------------------------------------------------------------
+3.......
+
+mysql> select emp_name,salary from employee order by salary asc;
++----------+--------+
+| emp_name | salary |
++----------+--------+
+| xyz      |  20000 |
+| xxx      |  25000 |
+| qwe      |  25000 |
+| pqr      |  30000 |
+| abc      | 500000 |
++----------+--------+
+5 rows in set (0.00 sec)

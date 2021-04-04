@@ -1,0 +1,154 @@
+Enter password: *******
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 1
+Server version: 5.0.45-community-nt MySQL Community Edition (GPL)
+
+Type 'help;' or '\h' for help. Type '\c' to clear the buffer.
+
+mysql> use db1;
+Database changed
+mysql> create table employee(eno int primary key,enm varchar(20),age int);
+Query OK, 0 rows affected (4.66 sec)
+
+mysql> insert into employee value(1,'shreyash',18);
+Query OK, 1 row affected (0.14 sec)
+
+mysql> insert into employee value(2,'sanskriti',16);
+Query OK, 1 row affected (0.07 sec)
+
+mysql> insert into employee value(3,'tanaya',20);
+Query OK, 1 row affected (0.17 sec)
+
+mysql> insert into employee value(4,'rasika',25);
+Query OK, 1 row affected (0.59 sec)
+
+mysql> insert into employee value(5,'aditya',30);
+Query OK, 1 row affected (0.06 sec)
+
+mysql> select * from employee;
++-----+-----------+------+
+| eno | enm       | age  |
++-----+-----------+------+
+|   1 | shreyash  |   18 |
+|   2 | sanskriti |   16 |
+|   3 | tanaya    |   20 |
+|   4 | rasika    |   25 |
+|   5 | aditya    |   30 |
++-----+-----------+------+
+5 rows in set (0.03 sec)
+
+mysql> select max(age) from employee;
++----------+
+| max(age) |
++----------+
+|       30 |
++----------+
+1 row in set (0.02 sec)
+
+mysql> select max(age),name from employee;
+ERROR 1054 (42S22): Unknown column 'name' in 'field list'
+mysql> select max(age),enm from employee;
+ERROR 1140 (42000): Mixing of GROUP columns (MIN(),MAX(),COUNT(),...) with no GROUP columns is illegal if there is no GROUP BY clause
+mysql> select max(age),enm from employee group by enm;
++----------+-----------+
+| max(age) | enm       |
++----------+-----------+
+|       30 | aditya    |
+|       25 | rasika    |
+|       16 | sanskriti |
+|       18 | shreyash  |
+|       20 | tanaya    |
++----------+-----------+
+5 rows in set (0.04 sec)
+
+mysql> select max(age),enm from employee group by age;
++----------+-----------+
+| max(age) | enm       |
++----------+-----------+
+|       16 | sanskriti |
+|       18 | shreyash  |
+|       20 | tanaya    |
+|       25 | rasika    |
+|       30 | aditya    |
++----------+-----------+
+5 rows in set (0.00 sec)
+
+mysql> select max(age),enm from employee group by age,enm;
++----------+-----------+
+| max(age) | enm       |
++----------+-----------+
+|       16 | sanskriti |
+|       18 | shreyash  |
+|       20 | tanaya    |
+|       25 | rasika    |
+|       30 | aditya    |
++----------+-----------+
+5 rows in set (0.00 sec)
+
+mysql> select max(age) from employee group by enm;
++----------+
+| max(age) |
++----------+
+|       30 |
+|       25 |
+|       16 |
+|       18 |
+|       20 |
++----------+
+5 rows in set (0.00 sec)
+
+mysql> select max(age) from employee;
++----------+
+| max(age) |
++----------+
+|       30 |
++----------+
+1 row in set (0.00 sec)
+
+mysql> select min(age) from employee;
++----------+
+| min(age) |
++----------+
+|       16 |
++----------+
+1 row in set (0.05 sec)
+
+mysql> select * from employee;
++-----+-----------+------+
+| eno | enm       | age  |
++-----+-----------+------+
+|   1 | shreyash  |   18 |
+|   2 | sanskriti |   16 |
+|   3 | tanaya    |   20 |
+|   4 | rasika    |   25 |
+|   5 | aditya    |   30 |
++-----+-----------+------+
+5 rows in set (0.00 sec)
+
+mysql> select count(age) from employee;
++------------+
+| count(age) |
++------------+
+|          5 |
++------------+
+1 row in set (0.85 sec)
+
+mysql> select sum(eno) from employee;
++----------+
+| sum(eno) |
++----------+
+|       15 |
++----------+
+1 row in set (0.06 sec)
+
+mysql> select avg(eno) from employee;
++----------+
+| avg(eno) |
++----------+
+|   3.0000 |
++----------+
+1 row in set (0.00 sec)
+
+mysql>
+
+
